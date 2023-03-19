@@ -6,17 +6,24 @@ const stepY = resY / vResY;
 
 const UP = 1; const LEFT = 2; const DOWN = 3; const RIGHT = 4;
 
+const appleIcon = new Image();
+appleIcon.onload = drawApple;
+appleIcon.src = "apple.png";
+
 var snake = [
     [2, 1], // head
     [1, 1]  // tail
 ]
 
+var applePosition = [0,0];
+
 var heading = RIGHT;
 var nextHeading = [];
 
-var refreshInterval = 100;
+var refreshInterval = 500;
 
 var ctx;
+var mainLoop;
 
 function main() {
 
@@ -26,17 +33,22 @@ function main() {
     canvas.height = resY;
 
     ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
 
     document.onkeydown = handleInpput;
 
+    newApple();
+
     draw();
 
-    setInterval(() => move(), refreshInterval);
+    updateMainLoop();
 }
 
 function draw() {
     drawSnake(snake);
     drawGrid();
+    drawApple();
 }
 
 function drawGrid() {
@@ -55,6 +67,10 @@ function drawGrid() {
     }
 }
 
+function drawApple() {
+    ctx.drawImage(appleIcon, applePosition[0] * stepX, applePosition[1] * stepY, stepX, stepY);
+}
+
 function drawSnake(snake, clear) {
     if (!clear) {
         ctx.fillStyle = "rgba(40, 255, 40, 0.9)";
@@ -66,6 +82,22 @@ function drawSnake(snake, clear) {
     snake.forEach(s => {
         ctx.fillRect(s[0] * stepX, s[1] * stepY, stepX, stepY);
     });
+}
+
+function newApple() {
+    let freeCells = [];
+    let snakeFlatPos = flattenSnakeShape();
+    for (var x=0; x<vResX; x++) {
+        for (var y=0; y<vResY; y++) {
+            if (snakeFlatPos.indexOf(x + "|" + y) == -1) {
+                freeCells.push([x,y]);
+            }
+        }
+    }
+
+    applePosition = freeCells[Math.floor(Math.random()*freeCells.length)];
+    refreshInterval -= refreshInterval * 0.05;
+    updateMainLoop();
 }
 
 function move() {
@@ -123,12 +155,42 @@ function move() {
         newHead[1] = vResY - 1;
     }
 
-    snake.unshift(newHead);
-    let tail = snake.pop();
+    let flatNewHead = newHead[0] + "|" + newHead[1];
+    if (flattenSnakeShape().indexOf(flatNewHead) != -1) {
+        gameOver();
+        return;
+    }
 
-    drawSnake([tail], true);
+    snake.unshift(newHead);
+    let tail;
+
+    if (applePosition[0] == newHead[0] && applePosition[1] == newHead[1]) {
+        tail = null;
+        newApple();
+        drawApple();
+    } else {
+        tail = snake.pop();
+    }
+
+    if (tail != null) {
+        drawSnake([tail], true);
+    }
+
     drawGrid();
     drawSnake([newHead]);
+}
+
+function updateMainLoop() {
+    if (mainLoop) {
+        clearInterval(mainLoop);
+    }
+    mainLoop = setInterval(move, refreshInterval);
+}
+
+function gameOver() {
+    clearInterval(mainLoop)
+    alert("Game over!");
+    window.location.reload();
 }
 
 function handleInpput(e) {
@@ -148,6 +210,10 @@ function handleInpput(e) {
     }
 
     return false;
+}
+
+function flattenSnakeShape() {
+    return snake.map(p => p[0] + "|" + p[1]);
 }
 
 main();
