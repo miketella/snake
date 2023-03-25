@@ -4,7 +4,7 @@ const resY = 400; const vResY = 7;
 const stepX = resX / vResX;
 const stepY = resY / vResY;
 
-const UP = 1; const LEFT = 2; const DOWN = 3; const RIGHT = 4;
+const UP = 0; const RIGHT = 1; const DOWN = 2; const LEFT = 3;
 
 const appleIcon = new Image();
 appleIcon.onload = drawApple;
@@ -37,6 +37,7 @@ function main() {
     ctx.imageSmoothingQuality = 'high';
 
     document.onkeydown = handleInpput;
+    document.addEventListener("click", handleOnScreenKeypad)
 
     newApple();
 
@@ -191,6 +192,39 @@ function gameOver() {
     clearInterval(mainLoop)
     alert("Game over!");
     window.location.reload();
+}
+
+function handleOnScreenKeypad(e) {
+    let isLandscape = window.matchMedia("screen and (orientation:landscape)").matches
+    let btn = e.srcElement;
+    if (btn.classList.contains('up')) {
+        if (isLandscape) {
+            let next = heading - 1;
+            if (next == -1) {
+                next = 3;
+            }
+            nextHeading.push(next);
+        }
+        else {
+            nextHeading.push(UP);
+        }
+    }
+    if (btn.classList.contains('down')) {
+        if (isLandscape) {
+            console.log(heading);
+            nextHeading.push((heading + 1) % 4);
+            console.log(nextHeading);
+        }
+        else {
+            nextHeading.push(DOWN);
+        }
+    }
+    if (btn.classList.contains('left')) {
+        nextHeading.push(LEFT);
+    }
+    if (btn.classList.contains('right')) {
+        nextHeading.push(RIGHT);
+    }
 }
 
 function handleInpput(e) {

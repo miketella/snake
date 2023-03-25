@@ -10,6 +10,11 @@ html, body {
     padding:0;
 }
 
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 h1 {
     margin: 1em;
 }
@@ -18,4 +23,55 @@ canvas {
     border: 0.5em solid white;
     width: 100%;
     aspect-ratio: 2;
+}
+
+.keys {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+        ". up ."
+        "left . right"
+        ". down ."
+}
+
+.keys > * {
+    text-align: center;
+    font-size: min(calc(100vw / 3), calc(30vh/3));
+}
+
+.keys .up {
+    grid-area: up;
+}
+
+.keys .down {
+    grid-area: down;
+}
+
+.keys .left {
+    grid-area: left;
+}
+
+.keys .right {
+    grid-area: right;
+}
+
+@media screen and (orientation:landscape) {
+    .wrapper {
+        flex-direction: row;
+    }
+
+    h1 {
+        writing-mode: vertical-lr;
+        text-orientation: mixed;
+    }
+
+    .left, .right { display: none; }
+
+    .keys {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 }
