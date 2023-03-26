@@ -212,9 +212,7 @@ function handleOnScreenKeypad(e) {
     }
     if (btn.classList.contains('down')) {
         if (isLandscape) {
-            console.log(heading);
             nextHeading.push((heading + 1) % 4);
-            console.log(nextHeading);
         }
         else {
             nextHeading.push(DOWN);
