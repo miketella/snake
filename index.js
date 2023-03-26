@@ -37,7 +37,8 @@ function main() {
     ctx.imageSmoothingQuality = 'high';
 
     document.onkeydown = handleInpput;
-    document.addEventListener("touchstart", handleOnScreenKeypad)
+    document.addEventListener("touchstart", handleOnScreenKeypad);
+    document.addEventListener("mousedown", handleOnScreenKeypad);
 
     newApple();
 
