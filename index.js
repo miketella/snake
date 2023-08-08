@@ -1,5 +1,5 @@
-const resX = 800; const vResX = 14;
-const resY = 400; const vResY = 7;
+const resX = 800; const vResX = 18;
+const resY = 400; const vResY = 9;
 
 const stepX = resX / vResX;
 const stepY = resY / vResY;
