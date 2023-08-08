@@ -19,6 +19,18 @@ h1 {
     margin: 1em;
 }
 
+#points {
+    font-family:'Courier New', Courier, monospace;
+    font-weight: bold;
+    padding:1em;
+}
+
+.titlebar {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 canvas {
     border: 0.5em solid white;
     width: 100%;

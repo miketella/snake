@@ -179,6 +179,7 @@ function move() {
 
     drawGrid();
     drawSnake([newHead]);
+    updatePoints(snake.length - 2);
 }
 
 function updateMainLoop() {
@@ -246,6 +247,11 @@ function handleInpput(e) {
 
 function flattenSnakeShape() {
     return snake.map(p => p[0] + "|" + p[1]);
+}
+
+function updatePoints(newPoints) {
+    console.log(`New points: ${newPoints}`);
+    document.getElementById("points").innerHTML = newPoints;
 }
 
 main();
